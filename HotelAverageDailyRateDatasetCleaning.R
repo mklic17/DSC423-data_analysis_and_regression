@@ -135,6 +135,6 @@ hotel_bookings$meal
 # Data Omitting
 # market_segment. Complementary and Undefined values
 # TEST
-
+# TEST <- MANAN
 ##################################################################################
 summary(hotel_bookings$market_segment)
