@@ -144,6 +144,26 @@ hotel_bookings$children[is.na(hotel_bookings$children)] = 0
 # Data Omitting
 # market_segment. Complementary and Undefined values
 
+# Original dataset is 119390 observation
+# WORK IN PROGRESS - LONG RUN TIME
+obj_w_comp_market_value <- NULL
+hotel_bookings_new <- hotel_bookings[1,]
+j <- 1
+k <- 1
+for(i in 1:119390){
+  temp[i] <- hotel_bookings$market_segment[i]
+  temp2 <- as.numeric(temp[i])
+  if(temp2 == 2){
+    obj_w_comp_market_value[j] <- i
+    j <- j+1
+  }
+  else{
+    hotel_bookings_new[k,] <- hotel_bookings[i,]
+    k <- k+1
+  }
+}
+summary(hotel_bookings_new$market_segment)
+summary(hotel_bookings$market_segment)
 
 
 
