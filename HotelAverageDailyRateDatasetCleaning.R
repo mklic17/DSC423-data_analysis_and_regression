@@ -1,3 +1,4 @@
+#Step 1
 # File to Clean data for Milestone 3
 
 ##################################################################################
@@ -92,32 +93,32 @@ for(i in convertedDate) {
 hotel_bookings$season
 
 ##################################################################################
-# New Variable: countryOfOriginInPortugal
+# New Variable: country_of_origin_Portugal
 # Represents if the traveler's country of Origin is in Portugal (1) or outside of Portugal (0)
 ##################################################################################
 # Step 1 - Create new column on hotel_bookings called 'CountryOfOriginInPortugal' and input 'UNDEFINED' for the value
-hotel_bookings$countryOfOriginInPortugal <- 0
+hotel_bookings$country_of_origin_Portugal <- 0
 
 # Step 2 - Conditional to set the value of 1 to Travelers whose country of Origin is Portugal and 0 if they are outside of Portugal
-hotel_bookings$countryOfOriginInPortugal <- ifelse(hotel_bookings$country == 'PRT', 1, 0)
-hotel_bookings$countryOfOriginInPortugal
+hotel_bookings$country_of_origin_Portugal <- ifelse(hotel_bookings$country == 'PRT', 1, 0)
+hotel_bookings$country_of_origin_Portugal
 
 
 ##################################################################################
-# New Variable: reservedRoomAndAssignedRoomMatch
+# New Variable: reserved_matches_assigned_room
 # Reprents if the Reserved Room and the AssigendRoom fields contain the same value
 ##################################################################################
 # Step 1 - Create new column on hotel_bookings called 'CountryOfOriginInPortugal' and input 'UNDEFINED' for the value
-hotel_bookings$reservedRoomAndAssignedRoomMatch <- 0
+hotel_bookings$reserved_matches_assigned_room <- 0
 
 # Step 2 - Conditional to set the value of 1 to Travelers whose country of Origin is Portugal and 0 if they are outside of Portugal
-hotel_bookings$reservedRoomAndAssignedRoomMatch <- ifelse(hotel_bookings$reserved_room_type == hotel_bookings$assigned_room_type, 1, 0)
+hotel_bookings$reserved_matches_assigned_room <- ifelse(hotel_bookings$reserved_room_type == hotel_bookings$assigned_room_type, 1, 0)
 
-hotel_bookings$reservedRoomAndAssignedRoomMatch
+hotel_bookings$reserved_matches_assigned_room
 
 
 ################################################################################
-# Clean Existing Meals
+# Clean Existing Variable Meals
 # Combine SC and UNDEFINED as they are refer to the same value
 ################################################################################
 hotel_bookings$meal <- ifelse(hotel_bookings$meal == 'UNDEFINED', 'SC', hotel_bookings$meal)
@@ -128,14 +129,26 @@ hotel_bookings$meal <- ifelse(hotel_bookings$meal == 'UNDEFINED', 'SC', hotel_bo
 #    print(i)
 #  }
 #}
-summary(hotel_bookings$meal)
 
 hotel_bookings$meal
+
+##################################################################################
+# Clean Existing Variable Children
+# update NA values to be 0
+
+hotel_bookings$children[is.na(hotel_bookings$children)] = 0
+
+
+
 ##################################################################################
 # Data Omitting
 # market_segment. Complementary and Undefined values
-# TEST
-# TEST <- MANAN
+
+
+
+
+
+
 ##################################################################################
 # Clean Variables in Environment
 
