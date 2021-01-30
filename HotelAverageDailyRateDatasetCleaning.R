@@ -137,4 +137,14 @@ hotel_bookings$meal
 # TEST
 
 ##################################################################################
-summary(hotel_bookings$market_segment)
+# Clean Variables in Environment
+
+rm(winter2015Start, winter2015End, spring2015Start, spring2015End, summer2015Start, summer2015End, fall2015Start, fall2015End, 
+   winter2016Start, winter2016End, spring2016Start, spring2016End, summer2016Start, summer2016End, fall2016Start, fall2016End, 
+   winter2017Start, winter2017End, spring2017Start, spring2017End, summer2017Start, summer2017End, fall2017Start, fall2017End
+)
+rm(i, x, MonthDay, MonthDayYear, convertedDate)
+
+
+
+
