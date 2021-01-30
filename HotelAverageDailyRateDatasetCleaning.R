@@ -135,7 +135,7 @@ hotel_bookings$meal
 # Data Omitting
 # market_segment. Complementary and Undefined values
 # TEST
-
+# TEST <- MANAN
 ##################################################################################
 # Clean Variables in Environment
 
