@@ -67,13 +67,8 @@ numericDatasample <- numericData[sample(1:nrow(numericData), 1000, replace=FALSE
 # stays_in_week_nights
 # required_car_parking_spaces
 # lead_time
-hist(numericDatasample$adr, main="Average Daily Rate Histogram", xlab="Average Daily Rate", ylab="Density", freq=FALSE, breaks=100)
-meanAdr <- mean(numericDatasample$adr)
-sdAdr <- sd(numericDatasample$adr)
-curve(dnorm(x, meanAdr, sdAdr), add=TRUE, col="darkblue", lwd=2)
-
 help(hist)
-
+hist(numericDatasample$adr, main="Average Daily Rate", break=100, xlab="", ylab="")
 plot(numericDatasample$adr, numericDatasample$days_in_waiting_list)
 
 

@@ -6,13 +6,18 @@
 # Removing Outliers
 # https://www.r-bloggers.com/2020/01/how-to-remove-outliers-in-r/
 
-boxplot(hotel_bookings$adr)
+#boxplot(hotel_bookings$adr)
+#boxplot(hotel_bookings$adr, plot=FALSE)$out 
+#outliers <- boxplot(hotel_bookings$adr, plot=FALSE)$out # saves all the plots outside of the boxplot region
+#hotel_bookings <- hotel_bookings[-which(hotel_bookings$adr %in% outliers),] #saves the hotel_bookings data that are not In the outliers list
+#boxplot(hotel_bookings$adr)
 
-boxplot(hotel_bookings$adr, plot=FALSE)$out 
-outliers <- boxplot(hotel_bookings$adr, plot=FALSE)$out # saves all the plots outside of the boxplot region
-hotel_bookings <- hotel_bookings[-which(hotel_bookings$adr %in% outliers),] #saves the hotel_bookings data that are not In the outliers list
+Q <- quantile(hotel_bookings$adr, probs=c(.25, .75), na.rm = FALSE)
+iqr <- IQR(hotel_bookings$adr)
+up <-  Q[2]+1.5*iqr 
+low <- Q[1]-1.5*iqr
+eliminated <- subset(hotel_bookings, hotel_bookings$adr > (Q[1] - 1.5*iqr) & hotel_bookings$adr < (Q[2]+1.5*iqr))
 
-boxplot(hotel_bookings$adr)
 
 
 
@@ -192,6 +197,7 @@ rm(winter2015Start, winter2015End, spring2015Start, spring2015End, summer2015Sta
    winter2017Start, winter2017End, spring2017Start, spring2017End, summer2017Start, summer2017End, fall2017Start, fall2017End
 )
 rm(outliers, i, x, MonthDay, MonthDayYear, convertedDate)
+rm(convertDateToSeason)
 
 
 
