@@ -1,5 +1,49 @@
-#Step 1
-# File to Clean data for Milestone 3
+# File to Clean the hotel_bookings data
+
+
+
+##################################################################################
+# Removing Outliers
+# https://www.r-bloggers.com/2020/01/how-to-remove-outliers-in-r/
+
+boxplot(hotel_bookings$adr)
+
+boxplot(hotel_bookings$adr, plot=FALSE)$out 
+outliers <- boxplot(hotel_bookings$adr, plot=FALSE)$out # saves all the plots outside of the boxplot region
+hotel_bookings<- hotel_bookings[-which(hotel_bookings$adr %in% outliers),] #saves the hotel_bookings data that are not In the outliers list
+
+boxplot(hotel_bookings$adr)
+
+
+
+##################################################################################
+# Data Omitting
+# market_segment. Complementary and Undefined values
+
+# Original dataset is 119390 observation
+# WORK IN PROGRESS - LONG RUN TIME
+
+obj_w_comp_market_value <- NULL
+hotel_bookings_new <- hotel_bookings[1,]
+
+j <- 1
+k <- 1
+for(i in 1:1000){
+  curr <- hotel_bookings$market_segment[i]
+  temp2 <- as.numeric(curr)
+  if(temp2 == 2){
+    obj_w_comp_market_value[j] <- i
+    j <- j+1
+  }
+  else{
+    hotel_bookings_new[k,] <- hotel_bookings[i,]
+    k <- k+1
+  }
+}
+summary(hotel_bookings_new$market_segment)
+summary(hotel_bookings$market_segment)
+
+
 
 ##################################################################################
 # New Variable: season
@@ -74,6 +118,11 @@ convertDateToSeason <- function(providedDate) {
   return(result)
 }
 
+##################################################################################
+# New Variable: season
+# Represents the season in which the arrival date lands on
+##################################################################################
+
 # Step 1 - Convert Values (arrival_date_month, arrival_date_day_of_month, arrival_date_year) to DATE FORMAT
 MonthDay <- paste(hotel_bookings$arrival_date_month, hotel_bookings$arrival_date_day_of_month, sep=" ", collapse = NULL) # concat ("Month Day")
 MonthDayYear <- paste(MonthDay, hotel_bookings$arrival_date_year, sep=", ", collapse=NULL) # concat ("Month Day, Year")
@@ -142,7 +191,7 @@ hotel_bookings$children[is.na(hotel_bookings$children)] = 0
 
 ##################################################################################
 # Create new Variable: total_number_of_guests
-# 
+# Sums the total number of children, adults, babies in a room
 
 hotel_bookings$total_number_of_guests <- NA
 
@@ -156,44 +205,13 @@ hotel_bookings$total_number_of_guests
 
 
 ##################################################################################
-# Data Omitting
-# market_segment. Complementary and Undefined values
-
-# Original dataset is 119390 observation
-# WORK IN PROGRESS - LONG RUN TIME
-
-obj_w_comp_market_value <- NULL
-hotel_bookings_new <- hotel_bookings[1,]
-
-j <- 1
-k <- 1
-for(i in 1:1000){
-  curr <- hotel_bookings$market_segment[i]
-  temp2 <- as.numeric(curr)
-  if(temp2 == 2){
-    obj_w_comp_market_value[j] <- i
-    j <- j+1
-  }
-  else{
-    hotel_bookings_new[k,] <- hotel_bookings[i,]
-    k <- k+1
-  }
-}
-summary(hotel_bookings_new$market_segment)
-summary(hotel_bookings$market_segment)
-
-
-
-
-
-##################################################################################
 # Clean Variables in Environment
 
 rm(winter2015Start, winter2015End, spring2015Start, spring2015End, summer2015Start, summer2015End, fall2015Start, fall2015End, 
    winter2016Start, winter2016End, spring2016Start, spring2016End, summer2016Start, summer2016End, fall2016Start, fall2016End, 
    winter2017Start, winter2017End, spring2017Start, spring2017End, summer2017Start, summer2017End, fall2017Start, fall2017End
 )
-rm(i, x, MonthDay, MonthDayYear, convertedDate)
+rm(outliers, i, x, MonthDay, MonthDayYear, convertedDate)
 
 
 
