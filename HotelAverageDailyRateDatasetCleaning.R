@@ -10,7 +10,7 @@ boxplot(hotel_bookings$adr)
 
 boxplot(hotel_bookings$adr, plot=FALSE)$out 
 outliers <- boxplot(hotel_bookings$adr, plot=FALSE)$out # saves all the plots outside of the boxplot region
-hotel_bookings<- hotel_bookings[-which(hotel_bookings$adr %in% outliers),] #saves the hotel_bookings data that are not In the outliers list
+hotel_bookings <- hotel_bookings[-which(hotel_bookings$adr %in% outliers),] #saves the hotel_bookings data that are not In the outliers list
 
 boxplot(hotel_bookings$adr)
 
@@ -18,32 +18,12 @@ boxplot(hotel_bookings$adr)
 
 ##################################################################################
 # Data Omitting
-# market_segment. Complementary and Undefined values
+# market_segment Complementary and Undefined values
 
-# Original dataset is 119390 observation
-# WORK IN PROGRESS - LONG RUN TIME
+hotel_bookings <- subset(hotel_bookings, hotel_bookings$market_segment != "Complementary") # Remove Complementary Values from dataset
+hotel_bookings <- subset(hotel_bookings, hotel_bookings$market_segment != "Undefined") # Remove Undefined Values from dataset
 
-obj_w_comp_market_value <- NULL
-hotel_bookings_new <- hotel_bookings[1,]
-
-j <- 1
-k <- 1
-for(i in 1:1000){
-  curr <- hotel_bookings$market_segment[i]
-  temp2 <- as.numeric(curr)
-  if(temp2 == 2){
-    obj_w_comp_market_value[j] <- i
-    j <- j+1
-  }
-  else{
-    hotel_bookings_new[k,] <- hotel_bookings[i,]
-    k <- k+1
-  }
-}
-summary(hotel_bookings_new$market_segment)
-summary(hotel_bookings$market_segment)
-
-
+unique(hotel_bookings$market_segment) # no Complementary or Undefined remaining
 
 ##################################################################################
 # New Variable: season
