@@ -141,18 +141,35 @@ hotel_bookings$children[is.na(hotel_bookings$children)] = 0
 
 
 ##################################################################################
+# Create new Variable: total_number_of_guests
+# 
+
+hotel_bookings$total_number_of_guests <- NA
+
+x <- 1
+for(i in hotel_bookings$total_number_of_guests) {
+  hotel_bookings$total_number_of_guests[[x]] <- sum(hotel_bookings$children[[x]], hotel_bookings$adults[[x]], hotel_bookings$babies[[x]] )
+  x <- x + 1
+}
+
+hotel_bookings$total_number_of_guests
+
+
+##################################################################################
 # Data Omitting
 # market_segment. Complementary and Undefined values
 
 # Original dataset is 119390 observation
 # WORK IN PROGRESS - LONG RUN TIME
+
 obj_w_comp_market_value <- NULL
 hotel_bookings_new <- hotel_bookings[1,]
+
 j <- 1
 k <- 1
-for(i in 1:119390){
-  temp[i] <- hotel_bookings$market_segment[i]
-  temp2 <- as.numeric(temp[i])
+for(i in 1:1000){
+  curr <- hotel_bookings$market_segment[i]
+  temp2 <- as.numeric(curr)
   if(temp2 == 2){
     obj_w_comp_market_value[j] <- i
     j <- j+1
