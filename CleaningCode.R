@@ -102,7 +102,8 @@ dfCopy <- dfCopy %>%
   mutate(country_of_origin_Portugal = ifelse(country == 'PRT',1,0),
          reserved_matches_assigned_room = ifelse(reserved_room_type == assigned_room_type, 1,0),
          meal = ifelse(meal == 'UNDEFINED','SC',meal),
-         children = ifelse(is.na(children),0,children))
+         children = ifelse(is.na(children),0,children),
+         total_number_of_guests = adults + children + babies)
 
 ##################################################################################
 # Data Omitting
