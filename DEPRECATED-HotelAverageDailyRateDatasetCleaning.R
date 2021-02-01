@@ -1,4 +1,34 @@
-# File to Clean data for Milestone 3
+# File to Clean the hotel_bookings data
+
+
+
+##################################################################################
+# Removing Outliers
+# https://www.r-bloggers.com/2020/01/how-to-remove-outliers-in-r/
+
+#boxplot(hotel_bookings$adr)
+#boxplot(hotel_bookings$adr, plot=FALSE)$out 
+#outliers <- boxplot(hotel_bookings$adr, plot=FALSE)$out # saves all the plots outside of the boxplot region
+#hotel_bookings <- hotel_bookings[-which(hotel_bookings$adr %in% outliers),] #saves the hotel_bookings data that are not In the outliers list
+#boxplot(hotel_bookings$adr)
+
+Q <- quantile(hotel_bookings$adr, probs=c(.25, .75), na.rm = FALSE)
+iqr <- IQR(hotel_bookings$adr)
+up <-  Q[2]+1.5*iqr 
+low <- Q[1]-1.5*iqr
+eliminated <- subset(hotel_bookings, hotel_bookings$adr > (Q[1] - 1.5*iqr) & hotel_bookings$adr < (Q[2]+1.5*iqr))
+
+
+
+
+##################################################################################
+# Data Omitting
+# market_segment Complementary and Undefined values
+
+hotel_bookings <- subset(hotel_bookings, hotel_bookings$market_segment != "Complementary") # Remove Complementary Values from dataset
+hotel_bookings <- subset(hotel_bookings, hotel_bookings$market_segment != "Undefined") # Remove Undefined Values from dataset
+
+unique(hotel_bookings$market_segment) # no Complementary or Undefined remaining
 
 ##################################################################################
 # New Variable: season
@@ -73,6 +103,11 @@ convertDateToSeason <- function(providedDate) {
   return(result)
 }
 
+##################################################################################
+# New Variable: season
+# Represents the season in which the arrival date lands on
+##################################################################################
+
 # Step 1 - Convert Values (arrival_date_month, arrival_date_day_of_month, arrival_date_year) to DATE FORMAT
 MonthDay <- paste(hotel_bookings$arrival_date_month, hotel_bookings$arrival_date_day_of_month, sep=" ", collapse = NULL) # concat ("Month Day")
 MonthDayYear <- paste(MonthDay, hotel_bookings$arrival_date_year, sep=", ", collapse=NULL) # concat ("Month Day, Year")
@@ -92,32 +127,32 @@ for(i in convertedDate) {
 hotel_bookings$season
 
 ##################################################################################
-# New Variable: countryOfOriginInPortugal
+# New Variable: country_of_origin_Portugal
 # Represents if the traveler's country of Origin is in Portugal (1) or outside of Portugal (0)
 ##################################################################################
 # Step 1 - Create new column on hotel_bookings called 'CountryOfOriginInPortugal' and input 'UNDEFINED' for the value
-hotel_bookings$countryOfOriginInPortugal <- 0
+hotel_bookings$country_of_origin_Portugal <- 0
 
 # Step 2 - Conditional to set the value of 1 to Travelers whose country of Origin is Portugal and 0 if they are outside of Portugal
-hotel_bookings$countryOfOriginInPortugal <- ifelse(hotel_bookings$country == 'PRT', 1, 0)
-hotel_bookings$countryOfOriginInPortugal
+hotel_bookings$country_of_origin_Portugal <- ifelse(hotel_bookings$country == 'PRT', 1, 0)
+hotel_bookings$country_of_origin_Portugal
 
 
 ##################################################################################
-# New Variable: reservedRoomAndAssignedRoomMatch
+# New Variable: reserved_matches_assigned_room
 # Reprents if the Reserved Room and the AssigendRoom fields contain the same value
 ##################################################################################
 # Step 1 - Create new column on hotel_bookings called 'CountryOfOriginInPortugal' and input 'UNDEFINED' for the value
-hotel_bookings$reservedRoomAndAssignedRoomMatch <- 0
+hotel_bookings$reserved_matches_assigned_room <- 0
 
 # Step 2 - Conditional to set the value of 1 to Travelers whose country of Origin is Portugal and 0 if they are outside of Portugal
-hotel_bookings$reservedRoomAndAssignedRoomMatch <- ifelse(hotel_bookings$reserved_room_type == hotel_bookings$assigned_room_type, 1, 0)
+hotel_bookings$reserved_matches_assigned_room <- ifelse(hotel_bookings$reserved_room_type == hotel_bookings$assigned_room_type, 1, 0)
 
-hotel_bookings$reservedRoomAndAssignedRoomMatch
+hotel_bookings$reserved_matches_assigned_room
 
 
 ################################################################################
-# Clean Existing Meals
+# Clean Existing Variable Meals
 # Combine SC and UNDEFINED as they are refer to the same value
 ################################################################################
 hotel_bookings$meal <- ifelse(hotel_bookings$meal == 'UNDEFINED', 'SC', hotel_bookings$meal)
@@ -128,13 +163,42 @@ hotel_bookings$meal <- ifelse(hotel_bookings$meal == 'UNDEFINED', 'SC', hotel_bo
 #    print(i)
 #  }
 #}
-summary(hotel_bookings$meal)
 
 hotel_bookings$meal
-##################################################################################
-# Data Omitting
-# market_segment. Complementary and Undefined values
-# TEST
 
 ##################################################################################
-summary(hotel_bookings$market_segment)
+# Clean Existing Variable Children
+# update NA values to be 0
+
+hotel_bookings$children[is.na(hotel_bookings$children)] = 0
+
+
+
+##################################################################################
+# Create new Variable: total_number_of_guests
+# Sums the total number of children, adults, babies in a room
+
+hotel_bookings$total_number_of_guests <- NA
+
+x <- 1
+for(i in hotel_bookings$total_number_of_guests) {
+  hotel_bookings$total_number_of_guests[[x]] <- sum(hotel_bookings$children[[x]], hotel_bookings$adults[[x]], hotel_bookings$babies[[x]] )
+  x <- x + 1
+}
+
+hotel_bookings$total_number_of_guests
+
+
+##################################################################################
+# Clean Variables in Environment
+
+rm(winter2015Start, winter2015End, spring2015Start, spring2015End, summer2015Start, summer2015End, fall2015Start, fall2015End, 
+   winter2016Start, winter2016End, spring2016Start, spring2016End, summer2016Start, summer2016End, fall2016Start, fall2016End, 
+   winter2017Start, winter2017End, spring2017Start, spring2017End, summer2017Start, summer2017End, fall2017Start, fall2017End
+)
+rm(outliers, i, x, MonthDay, MonthDayYear, convertedDate)
+rm(convertDateToSeason)
+
+
+
+
